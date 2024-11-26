@@ -46,7 +46,8 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
 ## Kode Persisten Untuk CRUD
 
 - Kode Tambah Data
-  private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {                                          
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
         EntityManager em = emf.createEntityManager();
@@ -68,12 +69,12 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
         emf.close();
         tampil1();
         reset();
-    }
+      }
     
 
 - Kode Tampil Data
 
-  private void tampil1() {
+        private void tampil1() {
 
         EntityManager em = Persistence.createEntityManagerFactory("UasPBO").createEntityManager();
 
@@ -96,11 +97,12 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
             em.close();
         }
 
-    }
+      }
         
 
 - Kode Update Data
-  private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {                                          
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
         EntityManager em = emf.createEntityManager();
 
@@ -121,9 +123,11 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
         emf.close();
         tampil1();
         reset();
-    }
+      }
+  
 - Kode Hapus Data
-  private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+        private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {                                         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
         EntityManager em = emf.createEntityManager();
 
@@ -138,7 +142,7 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
         em.close();
         emf.close();
         tampil1();
-    }
+      }
       
   
 
