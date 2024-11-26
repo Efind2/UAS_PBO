@@ -45,27 +45,124 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
 
 ## Kode Persisten Untuk CRUD
 
+- Kode Tambah Data
+  private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {                                          
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+
+        Mahasiswa satu = new Mahasiswa();
+        satu.setNim(txtNIM.getText());
+        satu.setNama(txtNama.getText());
+        satu.setAlamat(txtAlamat.getText());
+        satu.setAsalsma(txtAsalSMA.getText());
+        satu.setNamaorangtua(txtNamaOrtu.getText());
+
+        em.persist(satu);
+
+        em.getTransaction().commit();
+        JOptionPane.showMessageDialog(null, "Berhasil diSimpan");
+        em.close();
+        emf.close();
+        tampil1();
+        reset();
+    }
+    
+
+- Kode Tampil Data
+
+  private void tampil1() {
+
+        EntityManager em = Persistence.createEntityManagerFactory("UasPBO").createEntityManager();
+
+        try {
+            List<Mahasiswa> hasil = em.createNamedQuery("Mahasiswa.findAll", Mahasiswa.class).getResultList();
+
+            DefaultTableModel tbmk = new DefaultTableModel(new String[]{"NIM", "Nama", "Alamat", "Asal Sekolah", "Nama Orang Tua"}, 0);
+            for (Mahasiswa data : hasil) {
+                tbmk.addRow(new Object[]{
+                    data.getNim(),
+                    data.getNama(),
+                    data.getAlamat(),
+                    data.getAsalsma(),
+                    data.getNamaorangtua(),}
+                );
+            }
+            tabelMahasiswa.setModel(tbmk);
+        } finally {
+            reset();
+            em.close();
+        }
+
+    }
+        
+
+- Kode Update Data
+  private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Mahasiswa mahasiswa = em.find(Mahasiswa.class,
+                 txtNIM.getText());
+        if (mahasiswa != null) {
+            mahasiswa.setNama(txtNama.getText());
+            mahasiswa.setAlamat(txtAlamat.getText());
+            mahasiswa.setAsalsma(txtAsalSMA.getText());
+            mahasiswa.setNamaorangtua(txtNamaOrtu.getText());
+            
+
+        }
+        em.getTransaction().commit();
+        JOptionPane.showMessageDialog(null, "Berhasil diUpdate");
+        em.close();
+        emf.close();
+        tampil1();
+        reset();
+    }
+- Kode Hapus Data
+  private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+        Mahasiswa mahasiswa = em.find(Mahasiswa.class,
+                 txtNIM.getText());
+        if (mahasiswa != null) {
+            em.remove(mahasiswa);
+        }
+        em.getTransaction().commit();
+        JOptionPane.showMessageDialog(null, "Berhasil dihapus");
+        em.close();
+        emf.close();
+        tampil1();
+    }
+      
+  
+
 ## Kode Persisten Untuk Login, Lupa Password dan buat akun user baru
 - Kode Login
 
         private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        if (txtUser.getText().equals("") | pwUser.getText().equals("")) {
+        if (txtUser.getText().equals("") | passField.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Isi Terlebih Dahulu");
         } else {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("TugasPersis");
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
             EntityManager em = emf.createEntityManager();
 
             em.getTransaction().begin();
 
             String user = txtUser.getText();
-            String pw = pwUser.getText();
+            String pw = passField.getText();
             Pengguna y = em.find(Pengguna.class, user);
 
             if (y == null) {
                 JOptionPane.showMessageDialog(null, "Data User tidak ditemukan");
             } else if (y.getPassword().equals(pw)) {
                 JOptionPane.showMessageDialog(null, "Selamat datang");
-                ReportMataKuliah p = new ReportMataKuliah();
+                DataMahasiswa p = new DataMahasiswa();
                 p.setVisible(true);
                 this.dispose();
             } else {
@@ -75,61 +172,105 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
             em.close();
             emf.close();
         }
-        } 
+        }
 
 - Kode Lupa Passwoord
 
-        private void btnLupaPasswordActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        if (txtPassword.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Isi Terlebih Dahulu");
-        } else {
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("TugasPersis");
-            EntityManager em = emf.createEntityManager();
+       private void btnLogin1ActionPerformed(java.awt.event.ActionEvent evt) {                                          
 
-            try {
-                em.getTransaction().begin();
-                String user = txtUsername.getText();
-                String pw = txtPassword.getText();
+        String password1 = new String(passField.getPassword());
+        String password2 = new String(passField1.getPassword());
+        String username = txtUsername.getText();
 
-                Pengguna x = em.find(Pengguna.class, user);
-                if (x != null) {
-                    x.setUsername(user);
-                    x.setPassword(pw);
+        
+        validatePassword(password1);
 
-                    em.getTransaction().commit();
-
-                    JOptionPane.showMessageDialog(null, "Password berhasil diubah");
-                    em.close();
-                    emf.close();
-                    Login y = new Login();
-                    y.setVisible(true);
-                    this.dispose();
-                } else {
-
-                    JOptionPane.showMessageDialog(null, "Username tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
-                    em.getTransaction().rollback();
-                }
-            } catch (Exception ex) {
-
-                em.getTransaction().rollback();
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Terjadi kesalahan saat mengubah password", "Error", JOptionPane.ERROR_MESSAGE);
-            } 
+        
+        if (username.isEmpty() || password1.isEmpty() || password2.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Semua field harus diisi", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        }                                               
+
+        if (!password1.equals(password2)) {
+            jLabel12.setText("Password tidak sama");
+            return;
+        } else {
+            jLabel12.setText("Password cocok");
+        }
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            Pengguna user = em.find(Pengguna.class, username);
+            if (user != null) {
+
+                user.setUsername(username);
+                user.setPassword(password1);
+
+                em.getTransaction().commit();
+
+                JOptionPane.showMessageDialog(null, "Password berhasil diubah");
+                em.close();
+                emf.close();
+
+                Login loginPage = new Login();
+                loginPage.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Username tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
+                em.getTransaction().rollback();
+            }
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Terjadi kesalahan saat mengubah password", "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            if (em.isOpen()) {
+                em.close();
+            }
+            if (emf.isOpen()) {
+                emf.close();
+            }
+        }
+
+
+      }  
+                                                             
 
 
 - Kode Buat akun user baru
 
-      private void btnBuatakunActionPerformed(java.awt.event.ActionEvent evt) {                                            
-       if (txtUser.getText().equals("") || pwUser.getText().equals("")) {
+      private void btnBuatActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        String password1 = new String(passField.getPassword());
+        String password2 = new String(pwUser.getPassword());
+        String username = txtUser.getText();
+
+        
+        validatePassword(password1);
+
+        
+        if (username.isEmpty() || password1.isEmpty() || password2.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Semua field harus diisi", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!password1.equals(password2)) {
+            jLabel12.setText("Password tidak sama");
+            return;
+        } else {
+            jLabel12.setText("Password cocok");
+        }
+        if (txtUser.getText().equals("") || pwUser.getText().equals("") || passField.getPassword().equals("")) {
             JOptionPane.showMessageDialog(null, "Isi semua data");
         } else {
             String user, pw;
             user = txtUser.getText();
             pw = pwUser.getText();
 
-            EntityManagerFactory emf = Persistence.createEntityManagerFactory("TugasPersis");
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
             EntityManager em = emf.createEntityManager();
             em.getTransaction().begin();
 
@@ -154,7 +295,8 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
             em.close();
             emf.close();
         }
-        }                                           
+        }                     
+                                                    
 
 
 ## Kode SQl 
