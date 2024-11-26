@@ -1,6 +1,6 @@
-# Menu Login Menggunakan Persistence
+# Ujian Akhir Semester Pemrograman Berorientasi Objek
 Hallo Semua 😄👋 Pada Tugas Pemograman Berorientasi Objek ini, saya menerapkan membuat menu login menggunakan persistence program CRUD (Create, Read, Update, Delete)  dan  penggunaan jasper juga upload file csv pada java GUI(Graphical User Interfaces) dengan IDE netbeans dan yang utama disini saya menggunakan **persistence**. Untuk mengimplementasikan program tersebut saya menggunakan bahasa pemrograman java dan menggunakan aplikasi pengelola database yaitu postgreSQL dan juga plugin iReport.
-dan saya menggunakan tabel  entitas Matakuliah dengan atribut Kode MK, SKS, NamaMk, Semester Ajar. dan entitas pengguna dengan atribut username dan password
+dan saya menggunakan tabel  entitas Mahasiswa dengan atribut NIM, Nama, Alamat, AsalSMA, NamaOrangTua. dan entitas pengguna dengan atribut username dan password
 ## Aplikasi
 - IDE NetBeans 16
 - PostgreSql
@@ -20,6 +20,7 @@ dan saya menggunakan tabel  entitas Matakuliah dengan atribut Kode MK, SKS, Nama
 -  Menampilkan data ke tabel
 -  Melakukan import file csv
 -  Mencetak laporan data
+-  mengecek karakter pada password
 
 ## Cara Instalasi 
 Install Plugin Ireport di IDE Netbeans dengan mencari menu tools > plugins > donload > add plugins . Tambahkan plugins ireport yang ada di dalam folder yang memiliki tipe file nbm jika tterjadi error install dulu `org-jdeskop-layout-realese.nbm` kemudian baru instal file nbm yang ada didalam folder ireport
@@ -41,6 +42,8 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
   ![image](https://github.com/user-attachments/assets/3be1861f-7495-4274-9e9e-4a4cd2924ee9)
 - Lalu klik Finish
   ![image](https://github.com/user-attachments/assets/e06e58c2-cc46-49e6-ac44-b59c3b36bd79)
+
+## Kode Persisten Untuk CRUD
 
 ## Kode Persisten Untuk Login, Lupa Password dan buat akun user baru
 - Kode Login
@@ -155,14 +158,16 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
 
 
 ## Kode SQl 
-- Tabel mata kuliah
+- Tabel Mahasiswa
 
-      CREATE TABLE mata_kuliah (
-      kodemk CHAR(10) NOT NULL PRIMARY KEY,
-      sks INTEGER NOT NULL,
-      namamk VARCHAR(30),
-      semesterajar INTEGER
-      );
+      CREATE TABLE Mahasiswa (
+      nim VARCHAR(20) PRIMARY KEY NOT NULL,
+      nama VARCHAR(50) NOT NULL,
+      alamat VARCHAR(100) NOT NULL,
+      asalsma VARCHAR(100) NOT NULL,
+      namaorangtua VARCHAR(50) NOT NULL
+);
+
     
 - Tabel Pengguna
 
