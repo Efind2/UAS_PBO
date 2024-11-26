@@ -418,7 +418,7 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
       alamat VARCHAR(100) NOT NULL,
       asalsma VARCHAR(100) NOT NULL,
       namaorangtua VARCHAR(50) NOT NULL
-);
+      );
 
     
 - Tabel Pengguna
