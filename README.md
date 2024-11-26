@@ -43,6 +43,100 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
 - Lalu klik Finish
   ![image](https://github.com/user-attachments/assets/e06e58c2-cc46-49e6-ac44-b59c3b36bd79)
 
+## Kode Import CSV dan Cetak Laporan
+- Kode Import CSV
+
+        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        int returnValue = jfc.showOpenDialog(null);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("UasPBO");
+        EntityManager em = emf.createEntityManager();
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File filePilihan = jfc.getSelectedFile();
+            System.out.println("yang dipilih : " + filePilihan.getAbsolutePath());
+
+            try (BufferedReader br = new BufferedReader(new FileReader(filePilihan))) {
+                Class.forName(driver);
+                conn = DriverManager.getConnection(koneksi, user, password);
+                String baris;
+                String pemisah = ";";
+
+                while ((baris = br.readLine()) != null) {
+                    String[] data = baris.split(pemisah);
+                    String nim = data[0];
+                    String nama = data[1];
+                    String alamat = data[2];
+                    String asal = data[3];
+                    String ortu = data[4];
+                    
+                    
+
+                    if (!nim.isEmpty() && !nama.isEmpty()&& !alamat.isEmpty()&& !asal.isEmpty()&& !ortu.isEmpty()) {
+                        em.getTransaction().begin();
+
+                        Mahasiswa ms = new Mahasiswa();
+                        ms.setNim(nim);
+                        ms.setNama(nama);
+                        ms.setAlamat(alamat);
+                        ms.setAsalsma(asal);
+                        ms.setNamaorangtua(ortu);
+
+                        em.persist(ms);
+
+                        em.getTransaction().commit();
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Gagal diinput");
+                    }
+                }
+                JOptionPane.showMessageDialog(null, "Sukses diinput");
+                tampil1();
+                em.close();
+                emf.close();
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "Gagal diinput");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Gagal diinput");
+            } catch (ClassNotFoundException | SQLException ex) {
+            }
+        }
+        }
+
+- Kode Cetak Laporan atau jasperReport
+
+    private void btnCetakActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            conn = DriverManager.getConnection(koneksi, user, password);
+            String sql = "select * from mahasiswa";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            File mahasiswa = new File(".");
+            System.out.println(mahasiswa.getCanonicalPath());
+
+            File jasperFile = new File(mahasiswa.getCanonicalPath() + "/src/UasPBO/" + "DataMahasiswa.jrxml");
+            JasperDesign jd = JRXmlLoader.load(jasperFile);
+            JRResultSetDataSource jds = new JRResultSetDataSource(rs);
+            JasperReport jr = JasperCompileManager.compileReport(jd);
+            JasperPrint jp = (JasperPrint) JasperFillManager.fillReport(jr, new HashMap<String, Object>(), jds);
+
+            JasperViewer.viewReport(jp);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DataMahasiswa.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DataMahasiswa.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (JRException ex) {
+            Logger.getLogger(DataMahasiswa.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 ## Kode Persisten Untuk CRUD
 
 - Kode Tambah Data
