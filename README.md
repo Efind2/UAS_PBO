@@ -9,8 +9,10 @@ dan saya menggunakan tabel  entitas Mahasiswa dengan atribut NIM, Nama, Alamat, 
 - [Cara Instalasi](#cara-instalasi)
 - [Membuat File Jasper](#membuat-file-jasper)
 - [Cara Pembuatan Persistence](#cara-pembuatan-persistence)
-- [Feature](#feature)
-- [Cara Instalasi](#cara-instalasi)
+- [Kode Import CSV dan Cetak Laporan](#kode-import-csv-dan-cetak-laporan)
+- [Kode Persisten Untuk CRUD](#kode-persisten-untuk-crud)
+- [Kode Persisten Untuk Login, Lupa Password dan buat akun user baru](#kode-persisten-untuk-login,-lupa-password-dan-buat-akun-user-baru)
+- [Kode Query SQl Database](#kode-query-sql-database)
 ## Aplikasi
 - IDE NetBeans 16
 - PostgreSql
@@ -407,7 +409,7 @@ Setelah File jadi anda bisa membuat tampilan layout anda sesuka hati, namun layo
                                                     
 
 
-## Kode SQl 
+## Kode Query SQl Database 
 - Tabel Mahasiswa
 
       CREATE TABLE Mahasiswa (
